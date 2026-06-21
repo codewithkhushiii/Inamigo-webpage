@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InAmigos Foundation – Together We Rise</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --s:#E8622A;--g:#F4B942;--d:#0D0D1A;--c:#FDF6EE;
+  --gr:#3D7A5A;--pu:#6C3FC4;--bl:#1E6FD9;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--d);color:#fff;overflow-x:hidden}
+
+/* ── CURSOR GLOW ── */
+#glow{
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,98,42,.18) 0%,transparent 70%);
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);transition:opacity .3s;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.5;pointer-events:none;z-index:1;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 4vw;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);
+  background:rgba(13,13,26,.7);
+}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;letter-spacing:-1px;color:#fff}
+.nav-logo span{color:var(--g)}
+nav ul{display:flex;gap:2rem;list-style:none}
+nav ul a{color:rgba(255,255,255,.55);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
+nav ul a:hover{color:#fff}
+.nav-donate{
+  background:var(--s);color:#fff;padding:.55rem 1.4rem;
+  border-radius:50px;text-decoration:none;font-weight:600;font-size:.88rem;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 0 20px rgba(232,98,42,.4);
+}
+.nav-donate:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(232,98,42,.6)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  position:relative;overflow:hidden;padding:8rem 4vw 5rem;
+}
+/* big background text */
+.hero-bg-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(7rem,18vw,18rem);
+  font-weight:700;letter-spacing:-.05em;
+  color:rgba(255,255,255,.025);
+  white-space:nowrap;pointer-events:none;user-select:none;
+  animation:drift 20s ease-in-out infinite;
+}
+@keyframes drift{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.03)}}
+
+/* orbs */
+.orb{position:absolute;border-radius:50%;pointer-events:none;animation:float 8s ease-in-out infinite}
+.orb1{width:500px;height:500px;top:-150px;right:-100px;background:radial-gradient(circle,rgba(232,98,42,.25),transparent 70%);animation-delay:0s}
+.orb2{width:600px;height:600px;bottom:-200px;left:-150px;background:radial-gradient(circle,rgba(108,63,196,.2),transparent 70%);animation-delay:-3s}
+.orb3{width:300px;height:300px;top:40%;right:20%;background:radial-gradient(circle,rgba(244,185,66,.15),transparent 70%);animation-delay:-5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+
+.hero-inner{
+  max-width:1200px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:center;
+  position:relative;z-index:2;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid rgba(244,185,66,.3);
+  background:rgba(244,185,66,.07);
+  color:var(--g);padding:.35rem 1rem;border-radius:50px;
+  font-size:.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:1.8rem;
+  animation:pulse-border 3s ease infinite;
+}
+@keyframes pulse-border{0%,100%{border-color:rgba(244,185,66,.3)}50%{border-color:rgba(244,185,66,.7)}}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.5s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3rem,5.5vw,5.2rem);
+  line-height:1.04;letter-spacing:-.03em;
+  margin-bottom:1.5rem;
+}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:block;animation:slide-up .9s cubic-bezier(.16,1,.3,1) both}
+.hero h1 .line:nth-child(1) span{animation-delay:.1s}
+.hero h1 .line:nth-child(2) span{animation-delay:.22s}
+.hero h1 .line:nth-child(3) span{animation-delay:.34s}
+@keyframes slide-up{from{transform:translateY(110%)}to{transform:translateY(0)}}
+.highlight{
+  font-style:italic;color:transparent;
+  -webkit-text-stroke:1.5px var(--s);
+  text-stroke:1.5px var(--s);
+}
+
+.hero-sub{
+  color:rgba(255,255,255,.55);font-size:1.05rem;font-weight:300;
+  max-width:480px;line-height:1.75;margin-bottom:2.5rem;
+}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem}
+.btn-flame{
+  position:relative;overflow:hidden;
+  background:var(--s);color:#fff;
+  padding:.9rem 2.2rem;border-radius:50px;
+  text-decoration:none;font-weight:600;font-size:1rem;
+  transition:transform .2s;
+  box-shadow:0 8px 30px rgba(232,98,42,.45);
+}
+.btn-flame::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.2) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform .5s;
+}
+.btn-flame:hover::before{transform:translateX(100%)}
+.btn-flame:hover{transform:translateY(-3px)}
+.btn-wire{
+  border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.8);
+  padding:.9rem 2.2rem;border-radius:50px;
+  text-decoration:none;font-weight:500;font-size:1rem;
+  transition:all .2s;
+}
+.btn-wire:hover{border-color:rgba(255,255,255,.7);color:#fff;background:rgba(255,255,255,.06)}
+
+/* stat ticker */
+.stat-row{display:flex;gap:2.5rem;flex-wrap:wrap}
+.stat-item{}
+.stat-item .n{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:2.4rem;font-weight:700;
+  background:linear-gradient(135deg,#fff 0%,var(--g) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+.stat-item .l{color:rgba(255,255,255,.4);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;margin-top:.25rem}
+
+/* hero right — floating cards */
+.hero-right{position:relative;height:480px}
+.float-card{
+  position:absolute;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;
+  padding:1.4rem 1.6rem;
+  backdrop-filter:blur(12px);
+  transition:transform .3s;
+}
+.float-card:hover{transform:translateY(-6px) scale(1.02)}
+.fc1{top:0;left:0;right:20px;animation:fc-float 6s ease-in-out infinite}
+.fc2{top:150px;right:0;width:200px;animation:fc-float 7s ease-in-out infinite .5s}
+.fc3{bottom:0;left:20px;width:200px;animation:fc-float 5.5s ease-in-out infinite 1s}
+@keyframes fc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.float-card .ico{font-size:1.6rem;margin-bottom:.7rem}
+.float-card h4{font-weight:600;font-size:.95rem;margin-bottom:.3rem}
+.float-card p{color:rgba(255,255,255,.5);font-size:.78rem;line-height:1.5}
+.fc-stat{
+  display:flex;align-items:center;gap:1rem;
+  background:rgba(244,185,66,.1);border:1px solid rgba(244,185,66,.25);
+  border-radius:12px;padding:.7rem 1rem;margin-top:1rem;
+}
+.fc-stat .n{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:var(--g)}
+.fc-stat .l{font-size:.72rem;color:rgba(255,255,255,.5)}
+
+/* ── MARQUEE STRIP ── */
+.marquee-wrap{
+  padding:1rem 0;overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.07);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.02);
+}
+.marquee-track{
+  display:flex;gap:0;white-space:nowrap;
+  animation:marquee 25s linear infinite;
+  width:max-content;
+}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.m-item{
+  display:inline-flex;align-items:center;gap:.8rem;
+  padding:.4rem 2rem;
+  font-size:.82rem;font-weight:500;color:rgba(255,255,255,.4);
+  border-right:1px solid rgba(255,255,255,.07);
+}
+.m-item .tag{
+  background:rgba(232,98,42,.15);color:var(--s);
+  padding:.15rem .6rem;border-radius:20px;font-size:.72rem;font-weight:600;
+}
+
+/* ── ABOUT ── */
+.about{
+  padding:7rem 4vw;position:relative;
+  background:#fff;color:var(--d);
+}
+.about::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--s),var(--g),var(--gr),var(--pu));
+}
+.about-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.section-eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--s);margin-bottom:1rem;
+}
+.section-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.2rem,3.5vw,3rem);
+  font-weight:900;line-height:1.1;letter-spacing:-.02em;
+  color:var(--d);margin-bottom:1.5rem;
+}
+.about-text p{color:#555;line-height:1.8;margin-bottom:1.2rem;font-size:1rem}
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:2rem}
+.cert{
+  display:flex;align-items:center;gap:.6rem;
+  background:#FDF6EE;border:1px solid #E8DDD4;
+  border-radius:10px;padding:.6rem .9rem;
+  font-size:.78rem;font-weight:600;color:var(--d);
+}
+.cert .c-dot{width:7px;height:7px;border-radius:50%;background:var(--gr);flex-shrink:0}
+
+/* about timeline */
+.about-timeline{position:relative;padding-left:2rem}
+.about-timeline::before{
+  content:'';position:absolute;left:.5rem;top:0;bottom:0;
+  width:1.5px;background:linear-gradient(to bottom,var(--s),var(--g),var(--gr));
+}
+.tl-item{margin-bottom:2rem;position:relative}
+.tl-dot{
+  position:absolute;left:-2rem;top:.25rem;
+  width:1rem;height:1rem;border-radius:50%;
+  background:#fff;border:2.5px solid var(--s);
+  display:flex;align-items:center;justify-content:center;
+}
+.tl-dot::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--s)}
+.tl-year{font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--s);margin-bottom:.3rem}
+.tl-title{font-weight:700;font-size:.95rem;color:var(--d);margin-bottom:.3rem}
+.tl-desc{font-size:.85rem;color:#777;line-height:1.6}
+.founder-card{
+  margin-top:2rem;background:var(--d);border-radius:16px;
+  padding:1.5rem;display:flex;align-items:center;gap:1.2rem;
+}
+.founder-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--s),var(--g));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;flex-shrink:0;
+}
+.founder-name{color:#fff;font-weight:700;font-size:.95rem}
+.founder-role{color:rgba(255,255,255,.45);font-size:.78rem;margin-top:.2rem}
+.founder-quote{color:rgba(255,255,255,.6);font-size:.82rem;line-height:1.5;margin-top:.5rem;font-style:italic}
+
+/* ── PROJECTS ── */
+.projects{padding:7rem 4vw;background:var(--d)}
+.projects-header{max-width:1200px;margin:0 auto 4rem}
+.projects-header .section-h{color:#fff}
+.projects-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;
+}
+.proj{
+  position:relative;border-radius:20px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  padding:2rem;cursor:pointer;
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  group:hover;
+}
+.proj::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  transition:opacity .35s;
+  background:var(--proj-grad,linear-gradient(135deg,rgba(232,98,42,.15),transparent));
+}
+.proj:hover{
+  transform:translateY(-8px) scale(1.01);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+}
+.proj:hover::before{opacity:1}
+.proj-line{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--proj-clr,var(--s));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.proj:hover .proj-line{transform:scaleX(1)}
+.proj-ico{
+  width:56px;height:56px;border-radius:14px;
+  background:var(--proj-bg,rgba(232,98,42,.12));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;margin-bottom:1.4rem;
+}
+.proj h3{
+  font-family:'Playfair Display',serif;font-size:1.3rem;
+  font-weight:700;margin-bottom:.6rem;
+}
+.proj p{color:rgba(255,255,255,.5);font-size:.85rem;line-height:1.65}
+.proj-foot{
+  margin-top:1.5rem;padding-top:1.2rem;
+  border-top:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.proj-tag{
+  font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--proj-clr,var(--s));
+}
+.proj-arrow{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;transition:all .25s;
+}
+.proj:hover .proj-arrow{background:var(--proj-clr,var(--s));border-color:transparent}
+
+/* ── IMPACT ── */
+.impact{
+  padding:7rem 4vw;
+  background:linear-gradient(135deg,#0D0D1A 0%,#160820 50%,#0D0D1A 100%);
+  position:relative;overflow:hidden;
+}
+.impact::before{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:800px;height:800px;border-radius:50%;
+  background:radial-gradient(circle,rgba(108,63,196,.12),transparent 70%);
+  pointer-events:none;
+}
+.impact-inner{max-width:1200px;margin:0 auto}
+.impact-header{text-align:center;margin-bottom:4rem}
+.impact-header .section-h{color:#fff}
+.impact-header .section-eyebrow{text-align:center}
+.impact-desc{text-align:center;color:rgba(255,255,255,.45);max-width:560px;margin:.8rem auto 0;font-size:1rem;line-height:1.75}
+
+.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:4rem}
+.imp-card{
+  text-align:center;padding:2.5rem 1.5rem;
+  border-radius:20px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.imp-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:var(--ic,var(--g));
+  transform:scaleX(0);transform-origin:center;
+  transition:transform .3s;
+}
+.imp-card:hover{background:rgba(255,255,255,.07);transform:translateY(-5px)}
+.imp-card:hover::after{transform:scaleX(1)}
+.imp-ico{font-size:2rem;margin-bottom:1rem}
+.imp-num{
+  font-family:'Space Grotesk',sans-serif;font-size:3.2rem;font-weight:700;
+  color:var(--ic,var(--g));line-height:1;margin-bottom:.6rem;
+}
+.imp-lbl{color:rgba(255,255,255,.5);font-size:.85rem;line-height:1.5}
+
+/* quote wall */
+.quote-wall{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;padding:3rem;
+  display:grid;grid-template-columns:1fr 1fr;gap:2rem;
+}
+.quote-item{padding:1.5rem;border-radius:16px;background:rgba(255,255,255,.04);border-left:3px solid var(--q-clr,var(--s))}
+.quote-text{color:rgba(255,255,255,.7);font-size:.92rem;line-height:1.7;font-style:italic;margin-bottom:.8rem}
+.quote-name{font-weight:600;font-size:.82rem;color:rgba(255,255,255,.4)}
+
+/* ── GALLERY ── */
+.gallery{padding:5rem 0;background:var(--d);overflow:hidden}
+.gallery-inner{max-width:1200px;margin:0 auto;padding:0 4vw;margin-bottom:2rem;text-align:center}
+.gallery-inner .section-h{color:#fff;margin-bottom:.5rem}
+.gallery-inner p{color:rgba(255,255,255,.4);font-size:.92rem}
+
+.gallery-row{display:flex;gap:1rem;overflow:hidden;margin-bottom:1rem}
+.gallery-row:nth-child(2) .g-track{animation-direction:reverse}
+.g-track{
+  display:flex;gap:1rem;animation:g-scroll 30s linear infinite;
+  width:max-content;
+}
+@keyframes g-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.g-item{
+  width:180px;height:130px;border-radius:14px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.4rem;font-size:.72rem;font-weight:600;letter-spacing:.5px;
+  text-transform:uppercase;
+  transition:transform .3s;cursor:pointer;
+}
+.g-item:hover{transform:scale(1.08)}
+.g-item .gi{font-size:2.2rem}
+
+/* ── CTA ── */
+.cta-section{
+  padding:8rem 4vw;
+  position:relative;overflow:hidden;
+  background:var(--d);
+}
+.cta-ring{
+  position:absolute;width:700px;height:700px;border-radius:50%;
+  border:1px solid rgba(232,98,42,.1);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:spin-slow 40s linear infinite;
+}
+.cta-ring2{
+  position:absolute;width:900px;height:900px;border-radius:50%;
+  border:1px solid rgba(244,185,66,.06);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:spin-slow 60s linear infinite reverse;
+}
+@keyframes spin-slow{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.cta-inner{
+  position:relative;z-index:2;max-width:800px;margin:0 auto;text-align:center;
+}
+.cta-badge{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:rgba(232,98,42,.12);border:1px solid rgba(232,98,42,.3);
+  color:var(--s);padding:.5rem 1.2rem;border-radius:50px;
+  font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:2rem;
+}
+.cta-inner h2{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(2.5rem,6vw,5rem);
+  line-height:1.1;margin-bottom:1.5rem;
+}
+.cta-inner p{
+  color:rgba(255,255,255,.5);font-size:1.1rem;
+  max-width:520px;margin:0 auto 3rem;line-height:1.75;
+}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-big{
+  padding:1rem 2.8rem;border-radius:50px;
+  font-weight:700;font-size:1rem;text-decoration:none;
+  transition:all .25s;display:inline-block;
+}
+.btn-big.primary{
+  background:var(--s);color:#fff;
+  box-shadow:0 0 40px rgba(232,98,42,.5);
+}
+.btn-big.primary:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(232,98,42,.7)}
+.btn-big.secondary{border:1.5px solid rgba(255,255,255,.2);color:#fff}
+.btn-big.secondary:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.5)}
+.btn-big.gold{background:var(--g);color:var(--d);}
+.btn-big.gold:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(244,185,66,.4)}
+
+/* volunteer strip */
+.vol-strip{
+  max-width:800px;margin:3rem auto 0;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  flex-wrap:wrap;
+}
+.vol-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--av,#555);border:2px solid var(--d);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;margin-right:-10px;
+}
+.vol-text{color:rgba(255,255,255,.45);font-size:.85rem;margin-left:18px}
+.vol-text span{color:#fff;font-weight:600}
+
+/* ── FOOTER ── */
+footer{
+  background:#080812;color:rgba(255,255,255,.4);
+  padding:4rem 4vw 2rem;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;
+  padding-bottom:3rem;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.f-logo{
+  font-family:'Space Grotesk',sans-serif;font-size:1.4rem;
+  color:#fff;letter-spacing:-.5px;margin-bottom:1rem;
+}
+.f-logo span{color:var(--g)}
+.f-desc{font-size:.85rem;line-height:1.75;max-width:280px;margin-bottom:1.5rem}
+.f-social{display:flex;gap:.6rem}
+.f-soc{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;text-decoration:none;color:rgba(255,255,255,.4);
+  transition:all .2s;
+}
+.f-soc:hover{border-color:var(--g);color:var(--g)}
+.f-col h5{color:rgba(255,255,255,.7);font-size:.82rem;font-weight:700;letter-spacing:.5px;margin-bottom:1rem}
+.f-col ul{list-style:none}
+.f-col ul li{margin-bottom:.5rem}
+.f-col ul li a{color:rgba(255,255,255,.35);text-decoration:none;font-size:.85rem;transition:color .2s}
+.f-col ul li a:hover{color:rgba(255,255,255,.8)}
+.footer-bottom{
+  max-width:1200px;margin:1.5rem auto 0;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.78rem;flex-wrap:wrap;gap:.5rem;
+}
+.f-tags{display:flex;gap:.5rem;flex-wrap:wrap}
+.f-tag{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  padding:.2rem .7rem;border-radius:20px;font-size:.7rem;
+  color:rgba(255,255,255,.3);
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr}.hero-right{display:none}
+  .about-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:repeat(2,1fr)}
+  .impact-grid{grid-template-columns:repeat(2,1fr)}
+  .quote-wall{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  nav ul{display:none}
+  .projects-grid{grid-template-columns:1fr}
+  .impact-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR GLOW -->
+<div id="glow"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">In<span>Amigos</span></div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#cta">Get Involved</a></li>
+  </ul>
+  <a href="https://rzp.io/l/kWQ87HP" target="_blank" class="nav-donate">Donate ↗</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">RISE</div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="dot"></span> #InAmigos &nbsp;·&nbsp; Since 2020</div>
+      <h1>
+        <div class="line"><span>Uplift the</span></div>
+        <div class="line"><span class="highlight">Forgotten,</span></div>
+        <div class="line"><span>Inspire India.</span></div>
+      </h1>
+      <p class="hero-sub">
+        A movement rooted in compassion. InAmigos Foundation operates across 28 states delivering food, education, women's empowerment, animal welfare &amp; environmental care to those who need it most.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-flame">Explore Our Work →</a>
+        <a href="https://forms.gle/AB4c1hLaDDmtrKGU7" target="_blank" class="btn-wire">Volunteer With Us</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item"><div class="n" data-target="50000">0</div><div class="l">Meals Served</div></div>
+        <div class="stat-item"><div class="n" data-target="200">0</div><div class="l">Volunteers</div></div>
+        <div class="stat-item"><div class="n" data-target="28">0</div><div class="l">States Reached</div></div>
+        <div class="stat-item"><div class="n" data-target="6">0</div><div class="l">Projects</div></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="float-card fc1">
+        <div class="ico">🍱</div>
+        <h4>Project SEVA</h4>
+        <p>50,000+ meals &amp; clothing items distributed to underprivileged families across India.</p>
+        <div class="fc-stat">
+          <div><div class="n">50K+</div><div class="l">Beneficiaries</div></div>
+        </div>
+      </div>
+      <div class="float-card fc2">
+        <div class="ico">📚</div>
+        <h4>Bachpanshala</h4>
+        <p>Digital literacy for children who need it most.</p>
+      </div>
+      <div class="float-card fc3">
+        <div class="ico">🌱</div>
+        <h4>Prakriti</h4>
+        <p>Tree planting &amp; environmental conservation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="m-item"><span class="tag">SEVA</span>Food &amp; Clothing Distribution</div>
+    <div class="m-item"><span class="tag">EDU</span>Bachpanshala — Digital Literacy</div>
+    <div class="m-item"><span class="tag">WOMEN</span>Project Udaan — Empowerment</div>
+    <div class="m-item"><span class="tag">ECO</span>Project Prakriti — Sustainability</div>
+    <div class="m-item"><span class="tag">ANIMAL</span>Project Jeev — Animal Welfare</div>
+    <div class="m-item"><span class="tag">SKILL</span>Project Vikas — Livelihood</div>
+    <div class="m-item">✅ Section 8 Registered</div>
+    <div class="m-item">✅ 80G &amp; 12A Certified</div>
+    <div class="m-item">✅ NITI Aayog Listed</div>
+    <div class="m-item">✅ ISO 9001:2015</div>
+    <!-- dupe for seamless loop -->
+    <div class="m-item"><span class="tag">SEVA</span>Food &amp; Clothing Distribution</div>
+    <div class="m-item"><span class="tag">EDU</span>Bachpanshala — Digital Literacy</div>
+    <div class="m-item"><span class="tag">WOMEN</span>Project Udaan — Empowerment</div>
+    <div class="m-item"><span class="tag">ECO</span>Project Prakriti — Sustainability</div>
+    <div class="m-item"><span class="tag">ANIMAL</span>Project Jeev — Animal Welfare</div>
+    <div class="m-item"><span class="tag">SKILL</span>Project Vikas — Livelihood</div>
+    <div class="m-item">✅ Section 8 Registered</div>
+    <div class="m-item">✅ 80G &amp; 12A Certified</div>
+    <div class="m-item">✅ NITI Aayog Listed</div>
+    <div class="m-item">✅ ISO 9001:2015</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-eyebrow">Who We Are</div>
+      <h2 class="section-h">Born from the belief that no one should be left behind</h2>
+      <p>InAmigos Foundation was founded on <strong>September 23, 2020</strong> by <strong>Mr. Govind Shukla</strong> — headquartered in Bilaspur, Chhattisgarh. A Section 8 registered non-profit driven by collective compassion.</p>
+      <p>We focus on underserved communities, providing food, education, skills, and compassion to individuals and families who need it most. Our work spans <strong>28 states</strong> and grows every single day.</p>
+      <p>Every rupee raised is directed towards essential causes — food, education, women empowerment, animal welfare, and social upliftment. No overhead theatrics. Just impact.</p>
+      <div class="cert-grid">
+        <div class="cert"><span class="c-dot"></span>Section 8 Registered</div>
+        <div class="cert"><span class="c-dot"></span>80G &amp; 12A Certified</div>
+        <div class="cert"><span class="c-dot"></span>NITI Aayog Listed</div>
+        <div class="cert"><span class="c-dot"></span>ISO 9001:2015</div>
+        <div class="cert"><span class="c-dot"></span>CSR-1 Registered</div>
+        <div class="cert"><span class="c-dot"></span>NGO Darpan Listed</div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:.15s">
+      <div class="about-timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">SEPT 23, 2020</div>
+          <div class="tl-title">Foundation Established</div>
+          <div class="tl-desc">Mr. Govind Shukla establishes InAmigos Foundation in Bilaspur, Chhattisgarh with a vision for lasting social change.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--g)"></div>
+          <div class="tl-year" style="color:var(--g)">2021</div>
+          <div class="tl-title">Project SEVA Launched</div>
+          <div class="tl-desc">Large-scale food &amp; clothing distribution begins, reaching thousands of underprivileged families.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--gr)"></div>
+          <div class="tl-year" style="color:var(--gr)">2022</div>
+          <div class="tl-title">Expansion to 28 States</div>
+          <div class="tl-desc">Network of 200+ volunteers established. Bachpanshala, Udaan, Prakriti, Jeev &amp; Vikas launched.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--pu)"></div>
+          <div class="tl-year" style="color:var(--pu)">2024–25</div>
+          <div class="tl-title">50,000+ Lives Touched</div>
+          <div class="tl-desc">Certified by ISO 9001:2015. Listed on NITI Aayog. Impact spans across education, environment &amp; welfare.</div>
+        </div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-avatar">👨</div>
+        <div>
+          <div class="founder-name">Mr. Govind Shukla</div>
+          <div class="founder-role">Founder &amp; CEO, InAmigos Foundation</div>
+          <div class="founder-quote">"A charity should focus on children, animals, women, and the environment."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="projects-header reveal">
+    <div class="section-eyebrow" style="color:var(--g)">Our Initiatives</div>
+    <h2 class="section-h" style="color:#fff;max-width:700px">Six projects.<br>One heartbeat.</h2>
+  </div>
+  <div class="projects-grid">
+
+    <div class="proj reveal" style="--proj-clr:#E8622A;--proj-grad:linear-gradient(135deg,rgba(232,98,42,.15),transparent);--proj-bg:rgba(232,98,42,.12)">
+      <div class="proj-line"></div>
+      <div class="proj-ico">🍱</div>
+      <h3>Project SEVA</h3>
+      <p>Distributing food and clothing to underprivileged communities across India. Because basic dignity is a human right, not a privilege. Over 50,000+ meals served.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Food &amp; Clothing</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="proj reveal" style="--proj-clr:#3D7A5A;--proj-grad:linear-gradient(135deg,rgba(61,122,90,.15),transparent);--proj-bg:rgba(61,122,90,.12);transition-delay:.1s">
+      <div class="proj-line"></div>
+      <div class="proj-ico">📚</div>
+      <h3>Bachpanshala</h3>
+      <p>Bridging educational gaps through digital literacy training, life skills, and school education support — giving underprivileged children a fighting chance.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Education</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="proj reveal" style="--proj-clr:#6C3FC4;--proj-grad:linear-gradient(135deg,rgba(108,63,196,.15),transparent);--proj-bg:rgba(108,63,196,.12);transition-delay:.2s">
+      <div class="proj-line"></div>
+      <div class="proj-ico">🦋</div>
+      <h3>Project UDAAN</h3>
+      <p>Empowering women through skill development, vocational training, and financial independence. Because when a woman rises, a whole family rises with her.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Women Empowerment</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="proj reveal" style="--proj-clr:#1E6FD9;--proj-grad:linear-gradient(135deg,rgba(30,111,217,.15),transparent);--proj-bg:rgba(30,111,217,.12);transition-delay:.05s">
+      <div class="proj-line"></div>
+      <div class="proj-ico">🌿</div>
+      <h3>Project PRAKRITI</h3>
+      <p>Environmental conservation through tree-planting drives, awareness campaigns, and sustainable community practices — protecting the planet for future generations.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Environment</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="proj reveal" style="--proj-clr:#E87B2A;--proj-grad:linear-gradient(135deg,rgba(232,123,42,.15),transparent);--proj-bg:rgba(232,123,42,.1);transition-delay:.15s">
+      <div class="proj-line"></div>
+      <div class="proj-ico">🐾</div>
+      <h3>Project JEEV</h3>
+      <p>Animal welfare through rescue operations, feeding drives, and protection initiatives. Every living being deserves compassion — we make it happen on the ground.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Animal Welfare</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="proj reveal" style="--proj-clr:#F4B942;--proj-grad:linear-gradient(135deg,rgba(244,185,66,.15),transparent);--proj-bg:rgba(244,185,66,.1);transition-delay:.25s">
+      <div class="proj-line"></div>
+      <div class="proj-ico">⚒️</div>
+      <h3>Project VIKAS</h3>
+      <p>Skill development programs equipping individuals with tools to build sustainable livelihoods. Not charity — capability. Turning potential into prosperity.</p>
+      <div class="proj-foot">
+        <div class="proj-tag">Skill Development</div>
+        <div class="proj-arrow">→</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="impact-inner">
+    <div class="impact-header reveal">
+      <div class="section-eyebrow">Real Numbers. Real Lives.</div>
+      <h2 class="section-h">Change you can measure</h2>
+      <p class="impact-desc">Every stat here represents a real family helped, a real child educated, a real future changed.</p>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="imp-card" style="--ic:#E8622A">
+        <div class="imp-ico">🍚</div>
+        <div class="imp-num">50K+</div>
+        <div class="imp-lbl">Meals &amp; clothing distributed to underprivileged communities</div>
+      </div>
+      <div class="imp-card" style="--ic:#F4B942">
+        <div class="imp-ico">🤝</div>
+        <div class="imp-num">200+</div>
+        <div class="imp-lbl">Dedicated volunteers driving change across India</div>
+      </div>
+      <div class="imp-card" style="--ic:#3D7A5A">
+        <div class="imp-ico">🗺️</div>
+        <div class="imp-num">28</div>
+        <div class="imp-lbl">States covered under our nationwide network of care</div>
+      </div>
+      <div class="imp-card" style="--ic:#6C3FC4">
+        <div class="imp-ico">🌟</div>
+        <div class="imp-num">6</div>
+        <div class="imp-lbl">Flagship projects targeting critical social gaps</div>
+      </div>
+    </div>
+    <div class="quote-wall reveal">
+      <div class="quote-item" style="--q-clr:#E8622A">
+        <div class="quote-text">"InAmigos doesn't just distribute food — they distribute dignity. Every volunteer carries the foundation's soul in their hands."</div>
+        <div class="quote-name">— Community Member, Chhattisgarh</div>
+      </div>
+      <div class="quote-item" style="--q-clr:#F4B942">
+        <div class="quote-text">"Bachpanshala changed my daughter's life. She now knows how to use a computer and dreams of becoming an engineer."</div>
+        <div class="quote-name">— Parent Beneficiary, Uttar Pradesh</div>
+      </div>
+      <div class="quote-item" style="--q-clr:#3D7A5A">
+        <div class="quote-text">"Project Udaan gave me skills and confidence. I now run my own small tailoring business and support my family independently."</div>
+        <div class="quote-name">— Udaan Beneficiary, Maharashtra</div>
+      </div>
+      <div class="quote-item" style="--q-clr:#6C3FC4">
+        <div class="quote-text">"Volunteering with InAmigos showed me that you don't need resources to make change — you need heart. That's what this team has."</div>
+        <div class="quote-name">— Volunteer, Delhi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery">
+  <div class="gallery-inner reveal">
+    <h2 class="section-h" style="color:#fff">Moments of Impact</h2>
+    <p>A glimpse into the work happening on the ground, every single day.</p>
+  </div>
+  <div class="gallery-row">
+    <div class="g-track">
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0a00,#6b2a0a);color:#e87b2a"><div class="gi">🍱</div>Food Drive</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001a0a,#0a4a25);color:#3D7A5A"><div class="gi">📚</div>Education</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#100a1a,#3a1a6a);color:#a07af4"><div class="gi">🦋</div>Women Rise</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#000a1a,#0a2a6a);color:#5a9aef"><div class="gi">🌿</div>Prakriti</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0a00,#6a3500);color:#f4a942"><div class="gi">🐾</div>Animal Care</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a1a00,#254a00);color:#8ac44a"><div class="gi">⚒️</div>Skills</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0000,#4a0a0a);color:#f47a7a"><div class="gi">❤️</div>Community</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a1400,#5a4400);color:#f4d042"><div class="gi">🌱</div>Growth</div>
+      <!-- dupe -->
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0a00,#6b2a0a);color:#e87b2a"><div class="gi">🍱</div>Food Drive</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001a0a,#0a4a25);color:#3D7A5A"><div class="gi">📚</div>Education</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#100a1a,#3a1a6a);color:#a07af4"><div class="gi">🦋</div>Women Rise</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#000a1a,#0a2a6a);color:#5a9aef"><div class="gi">🌿</div>Prakriti</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0a00,#6a3500);color:#f4a942"><div class="gi">🐾</div>Animal Care</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a1a00,#254a00);color:#8ac44a"><div class="gi">⚒️</div>Skills</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0000,#4a0a0a);color:#f47a7a"><div class="gi">❤️</div>Community</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a1400,#5a4400);color:#f4d042"><div class="gi">🌱</div>Growth</div>
+    </div>
+  </div>
+  <div class="gallery-row" style="margin-top:1rem">
+    <div class="g-track" style="animation-direction:reverse;animation-duration:25s">
+      <div class="g-item" style="background:linear-gradient(135deg,#0a001a,#2a0a4a);color:#c07af4"><div class="gi">🙏</div>Seva</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001010,#004040);color:#4acfcf"><div class="gi">💧</div>Water</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#100005,#450020);color:#f47aaa"><div class="gi">🌸</div>Women</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a0a00,#3a3a00);color:#cfc04a"><div class="gi">🏠</div>Shelter</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001a1a,#005a5a);color:#4ad4d4"><div class="gi">🐕</div>Rescue</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0500,#5a1500);color:#e89a4a"><div class="gi">🌳</div>Trees</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#00001a,#00006a);color:#7a7af4"><div class="gi">⭐</div>Dreams</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a1a0a,#2a5a2a);color:#7acf7a"><div class="gi">🤲</div>Giving</div>
+      <!-- dupe -->
+      <div class="g-item" style="background:linear-gradient(135deg,#0a001a,#2a0a4a);color:#c07af4"><div class="gi">🙏</div>Seva</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001010,#004040);color:#4acfcf"><div class="gi">💧</div>Water</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#100005,#450020);color:#f47aaa"><div class="gi">🌸</div>Women</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a0a00,#3a3a00);color:#cfc04a"><div class="gi">🏠</div>Shelter</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#001a1a,#005a5a);color:#4ad4d4"><div class="gi">🐕</div>Rescue</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#1a0500,#5a1500);color:#e89a4a"><div class="gi">🌳</div>Trees</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#00001a,#00006a);color:#7a7af4"><div class="gi">⭐</div>Dreams</div>
+      <div class="g-item" style="background:linear-gradient(135deg,#0a1a0a,#2a5a2a);color:#7acf7a"><div class="gi">🤲</div>Giving</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-ring"></div>
+  <div class="cta-ring2"></div>
+  <div class="cta-inner reveal">
+    <div class="cta-badge">🤝 Join the Movement</div>
+    <h2>Be the<br><em>change</em><br>India needs.</h2>
+    <p>200+ volunteers are already out there, changing lives. Donate, volunteer, or simply spread the word — every act plants a seed of hope.</p>
+    <div class="cta-btns">
+      <a href="https://rzp.io/l/kWQ87HP" target="_blank" class="btn-big primary">💛 Donate Now</a>
+      <a href="https://forms.gle/AB4c1hLaDDmtrKGU7" target="_blank" class="btn-big gold">🤝 Volunteer</a>
+      <a href="https://inamigosfoundation.org.in/" target="_blank" class="btn-big secondary">Visit Website ↗</a>
+    </div>
+    <div class="vol-strip">
+      <div class="vol-avatar" style="--av:#6C3FC4">🧑</div>
+      <div class="vol-avatar" style="--av:#E8622A">👩</div>
+      <div class="vol-avatar" style="--av:#3D7A5A">👨</div>
+      <div class="vol-avatar" style="--av:#1E6FD9">🧑</div>
+      <div class="vol-avatar" style="--av:#F4B942">👩</div>
+      <div class="vol-text">Join <span>200+ volunteers</span> already making a difference</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo">In<span>Amigos</span> Foundation</div>
+      <p class="f-desc">Uplifting underprivileged communities through education, food, women's empowerment, animal welfare, and environmental sustainability across 28 states.</p>
+      <div class="f-social">
+        <a href="https://www.instagram.com/inamigos/" target="_blank" class="f-soc">📸</a>
+        <a href="https://www.facebook.com/inamigos.inamigos" target="_blank" class="f-soc">👥</a>
+        <a href="https://in.linkedin.com/company/inamigos-foundation" target="_blank" class="f-soc">💼</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h5>Projects</h5>
+      <ul>
+        <li><a href="#projects">Project SEVA</a></li>
+        <li><a href="#projects">Bachpanshala</a></li>
+        <li><a href="#projects">Project UDAAN</a></li>
+        <li><a href="#projects">Project PRAKRITI</a></li>
+        <li><a href="#projects">Project JEEV</a></li>
+        <li><a href="#projects">Project VIKAS</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h5>Organisation</h5>
+      <ul>
+        <li><a href="https://inamigosfoundation.org.in/page/About-Us" target="_blank">About Us</a></li>
+        <li><a href="https://inamigosfoundation.org.in/volunteers" target="_blank">Volunteers</a></li>
+        <li><a href="https://inamigosfoundation.org.in/events" target="_blank">Events</a></li>
+        <li><a href="https://inamigosfoundation.org.in/gallery" target="_blank">Gallery</a></li>
+        <li><a href="https://inamigosfoundation.org.in/blog" target="_blank">Blog</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:+916267309902">+91 626 730 9902</a></li>
+        <li><a href="mailto:support@inamigosfoundation.org.in">Email Us</a></li>
+        <li><a href="https://inamigosfoundation.org.in/contact" target="_blank">Contact Page</a></li>
+      </ul>
+      <p style="font-size:.78rem;margin-top:1rem;line-height:1.6">📍 Ward No. 5, Sipat Ujwal Nagar,<br>Bilaspur, CG – 495555</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 InAmigos Foundation · Founded by Govind Shukla · Bilaspur, Chhattisgarh</span>
+    <div class="f-tags">
+      <span class="f-tag">#InAmigos</span>
+      <span class="f-tag">#TogetherWeRise</span>
+      <span class="f-tag">#NGOIndia</span>
+      <span class="f-tag">#MakeADifference</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor glow
+const glow=document.getElementById('glow');
+document.addEventListener('mousemove',e=>{
+  glow.style.left=e.clientX+'px';
+  glow.style.top=e.clientY+'px';
+});
+
+// Scroll reveal
+const revealEls=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+  });
+},{threshold:.12});
+revealEls.forEach(el=>obs.observe(el));
+
+// Counter animation
+function animateCounter(el,target){
+  let start=0;
+  const suffix=target>=1000?'+':'';
+  const displayTarget=target>=1000?Math.floor(target/1000):target;
+  const displaySuffix=target>=1000?'K+':'+';
+  const step=displayTarget/60;
+  const timer=setInterval(()=>{
+    start+=step;
+    if(start>=displayTarget){
+      el.textContent=displayTarget+(target>=1000?'K+':'+');
+      clearInterval(timer);
+    } else {
+      el.textContent=Math.floor(start)+(target>=1000?'K':'');
+    }
+  },16);
+}
+const counterEls=document.querySelectorAll('[data-target]');
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      animateCounter(e.target,+e.target.dataset.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+counterEls.forEach(el=>counterObs.observe(el));
+</script>
+</body>
+</html>
